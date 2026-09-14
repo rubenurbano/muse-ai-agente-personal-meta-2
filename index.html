@@ -1,0 +1,1653 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Muse AI: El agente personal definitivo de Meta — Tutorial educativo por Rubén Sbarsky">
+<title>Muse AI: El agente personal definitivo — Tutorial</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0e1a;
+  --bg2:#070b14;
+  --card:#0f172a;
+  --border:#1e3a5f;
+  --accent:#00d4ff;
+  --green:#22c55e;
+  --amber:#f59e0b;
+  --red:#ef4444;
+  --purple:#a855f7;
+  --text:#e2e8f0;
+  --muted:#94a3b8;
+  --radius:10px;
+}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+  line-height:1.7;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ============ PROGRESO ============ */
+#progressBar{
+  position:fixed;top:0;left:0;height:3px;width:0%;
+  background:linear-gradient(90deg,var(--accent),var(--purple),var(--green));
+  z-index:1200;
+  transition:width .12s linear;
+  box-shadow:0 0 12px rgba(0,212,255,.7);
+}
+
+/* ============ NAVBAR ============ */
+.navbar{
+  position:fixed;top:3px;left:0;right:0;height:56px;
+  background:rgba(10,14,26,.92);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  z-index:1100;
+  display:flex;align-items:center;
+}
+.nav-inner{
+  display:flex;align-items:center;gap:6px;
+  overflow-x:auto;overflow-y:hidden;
+  white-space:nowrap;
+  width:100%;
+  padding:0 12px;
+  scrollbar-width:thin;
+  scrollbar-color:var(--border) transparent;
+  -webkit-overflow-scrolling:touch;
+}
+.nav-inner::-webkit-scrollbar{height:4px}
+.nav-inner::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+.nav-btn{
+  background:transparent;
+  border:1px solid transparent;
+  color:var(--muted);
+  font-family:inherit;
+  font-size:.82rem;
+  font-weight:600;
+  padding:7px 13px;
+  border-radius:20px;
+  cursor:pointer;
+  white-space:nowrap;
+  flex:0 0 auto;
+  transition:all .22s ease;
+  letter-spacing:.2px;
+}
+.nav-btn:hover{color:var(--text);background:rgba(0,212,255,.08);border-color:var(--border)}
+.nav-btn.active{
+  color:#04121c;
+  background:linear-gradient(135deg,var(--accent),#5ee7ff);
+  border-color:var(--accent);
+  box-shadow:0 0 14px rgba(0,212,255,.45);
+}
+.nav-btn.credits-btn{border:1px solid rgba(168,85,247,.5);color:#c9a6ff}
+.nav-btn.credits-btn.active{background:linear-gradient(135deg,var(--purple),#c084fc);color:#160a26;border-color:var(--purple);box-shadow:0 0 14px rgba(168,85,247,.5)}
+.nav-btn.src-btn{border:1px solid rgba(34,197,94,.45);color:#8ce7ac}
+.nav-btn.src-btn.active{background:linear-gradient(135deg,var(--green),#4ade80);color:#04200f;border-color:var(--green);box-shadow:0 0 14px rgba(34,197,94,.45)}
+
+/* ============ LAYOUT ============ */
+main{padding-top:59px;min-height:100vh}
+.section{display:none;padding:26px 18px 90px;max-width:1180px;margin:0 auto;animation:fadeUp .45s ease}
+.section.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+/* ============ HERO SVG ============ */
+.hero-svg-wrap{
+  width:100%;
+  border-radius:14px;
+  overflow:hidden;
+  border:1px solid var(--border);
+  background:#070b14;
+  box-shadow:0 0 40px rgba(0,212,255,.12),inset 0 0 60px rgba(0,0,0,.6);
+  margin-bottom:30px;
+  line-height:0;
+}
+.hero-svg-wrap svg{width:100%;height:auto;display:block}
+
+/* ============ HOME ============ */
+.home-head{text-align:center;padding:6px 0 10px}
+.badge{
+  display:inline-block;
+  font-size:.68rem;
+  font-weight:700;
+  letter-spacing:2.2px;
+  text-transform:uppercase;
+  color:var(--accent);
+  border:1px solid rgba(0,212,255,.45);
+  background:rgba(0,212,255,.07);
+  padding:6px 15px;
+  border-radius:30px;
+  margin-bottom:18px;
+}
+.home-head h1{
+  font-size:clamp(2rem,6vw,3.4rem);
+  line-height:1.1;
+  font-weight:800;
+  letter-spacing:-1px;
+  background:linear-gradient(120deg,#ffffff 0%,var(--accent) 45%,var(--purple) 100%);
+  -webkit-background-clip:text;
+  background-clip:text;
+  -webkit-text-fill-color:transparent;
+  margin-bottom:12px;
+}
+.home-head h2{
+  font-size:clamp(.95rem,2.6vw,1.3rem);
+  font-weight:500;
+  color:var(--muted);
+  margin-bottom:20px;
+}
+.home-desc{
+  max-width:820px;
+  margin:0 auto 26px;
+  color:#c3d0e2;
+  font-size:1rem;
+  text-align:center;
+}
+.quote-box{
+  max-width:760px;
+  margin:0 auto 30px;
+  border-left:3px solid var(--accent);
+  background:linear-gradient(90deg,rgba(0,212,255,.09),rgba(0,212,255,.01));
+  padding:18px 22px;
+  border-radius:0 12px 12px 0;
+  font-style:italic;
+  color:#d5e4f5;
+  font-size:.98rem;
+  text-align:left;
+}
+.quote-box span{display:block;margin-top:8px;font-style:normal;font-size:.78rem;color:var(--accent);letter-spacing:1px;font-weight:700}
+
+.metrics{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:14px;
+  margin:0 auto 30px;
+  max-width:900px;
+}
+.metric{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:18px 14px;
+  text-align:center;
+  transition:transform .25s ease,border-color .25s ease;
+}
+.metric:hover{transform:translateY(-4px);border-color:var(--accent)}
+.metric .val{
+  font-size:1.55rem;font-weight:800;color:var(--accent);
+  display:block;letter-spacing:-.5px;
+  text-shadow:0 0 18px rgba(0,212,255,.4);
+}
+.metric .lbl{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:1.2px;margin-top:5px;display:block}
+
+.date-strip{
+  display:flex;flex-wrap:wrap;gap:10px;justify-content:center;
+  margin-top:8px;
+}
+.chip{
+  font-size:.75rem;font-weight:600;
+  color:#b9c9dd;
+  background:rgba(30,58,95,.35);
+  border:1px solid var(--border);
+  padding:6px 14px;border-radius:20px;
+  letter-spacing:.4px;
+}
+.chip.accent{color:var(--accent);border-color:rgba(0,212,255,.45);background:rgba(0,212,255,.08)}
+
+/* ============ CONTENT CARDS ============ */
+.sec-header{margin-bottom:26px;border-bottom:1px solid var(--border);padding-bottom:16px}
+.sec-header .kicker{
+  font-size:.7rem;font-weight:700;letter-spacing:2.5px;
+  color:var(--accent);text-transform:uppercase;display:block;margin-bottom:8px;
+}
+.sec-header h2{
+  font-size:clamp(1.45rem,4vw,2.1rem);
+  font-weight:800;letter-spacing:-.6px;
+  color:#fff;line-height:1.2;
+}
+.sec-header p{color:var(--muted);margin-top:8px;font-size:.92rem}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:22px;
+  margin-bottom:18px;
+  transition:border-color .25s ease,box-shadow .25s ease;
+}
+.card:hover{border-color:rgba(0,212,255,.45);box-shadow:0 6px 28px rgba(0,0,0,.35)}
+.card h3{
+  font-size:1.12rem;font-weight:700;color:#fff;
+  margin-bottom:12px;display:flex;align-items:center;gap:9px;
+  letter-spacing:-.2px;
+}
+.card h3 .ico{
+  width:28px;height:28px;flex:0 0 28px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.85rem;
+  background:rgba(0,212,255,.12);
+  border:1px solid rgba(0,212,255,.35);
+  color:var(--accent);
+}
+.card h4{
+  font-size:.95rem;font-weight:700;color:var(--accent);
+  margin:16px 0 8px;letter-spacing:.2px;
+}
+.card p{color:#c3d0e2;font-size:.93rem;margin-bottom:10px}
+.card p:last-child{margin-bottom:0}
+
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+
+ul.clean,ol.clean{list-style:none;padding-left:0}
+ul.clean li{
+  position:relative;padding-left:24px;margin-bottom:9px;
+  color:#c3d0e2;font-size:.92rem;
+}
+ul.clean li::before{
+  content:"▸";position:absolute;left:4px;top:0;
+  color:var(--accent);font-weight:700;
+}
+ol.steps{list-style:none;counter-reset:st;padding-left:0}
+ol.steps li{
+  counter-increment:st;
+  position:relative;padding-left:46px;margin-bottom:16px;
+  color:#c3d0e2;font-size:.92rem;
+}
+ol.steps li::before{
+  content:counter(st);
+  position:absolute;left:0;top:-2px;
+  width:30px;height:30px;border-radius:9px;
+  background:linear-gradient(135deg,rgba(0,212,255,.2),rgba(168,85,247,.2));
+  border:1px solid var(--accent);
+  color:var(--accent);font-weight:800;font-size:.82rem;
+  display:flex;align-items:center;justify-content:center;
+}
+ol.steps li strong{color:#fff}
+
+/* Callouts */
+.callout{
+  border-radius:var(--radius);
+  padding:14px 18px;
+  margin:16px 0;
+  font-size:.9rem;
+  border-left:4px solid;
+  display:flex;gap:12px;align-items:flex-start;
+}
+.callout .ctag{
+  font-size:.66rem;font-weight:800;letter-spacing:1.6px;
+  text-transform:uppercase;flex:0 0 auto;padding-top:2px;
+}
+.callout.info{background:rgba(0,212,255,.07);border-color:var(--accent);color:#cfeaf5}
+.callout.info .ctag{color:var(--accent)}
+.callout.example{background:rgba(34,197,94,.07);border-color:var(--green);color:#cdf0da}
+.callout.example .ctag{color:var(--green)}
+.callout.warn{background:rgba(245,158,11,.08);border-color:var(--amber);color:#f6e2c0}
+.callout.warn .ctag{color:var(--amber)}
+.callout.error{background:rgba(239,68,68,.08);border-color:var(--red);color:#f8cfcf}
+.callout.error .ctag{color:var(--red)}
+
+/* Tables */
+.table-wrap{overflow-x:auto;border-radius:var(--radius);border:1px solid var(--border);margin:16px 0;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:.86rem;min-width:460px}
+thead th{
+  background:rgba(0,212,255,.09);
+  color:var(--accent);
+  text-align:left;
+  padding:12px 14px;
+  font-weight:700;
+  font-size:.74rem;
+  letter-spacing:1.3px;
+  text-transform:uppercase;
+  border-bottom:1px solid var(--border);
+}
+tbody td{padding:12px 14px;border-bottom:1px solid rgba(30,58,95,.55);color:#c3d0e2;vertical-align:top}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover{background:rgba(0,212,255,.04)}
+
+/* Badges / chips inline */
+.tag{
+  display:inline-block;font-size:.68rem;font-weight:700;
+  padding:3px 10px;border-radius:14px;letter-spacing:.6px;
+  text-transform:uppercase;
+}
+.tag.blue{background:rgba(0,212,255,.13);color:var(--accent);border:1px solid rgba(0,212,255,.35)}
+.tag.green{background:rgba(34,197,94,.13);color:var(--green);border:1px solid rgba(34,197,94,.35)}
+.tag.amber{background:rgba(245,158,11,.13);color:var(--amber);border:1px solid rgba(245,158,11,.35)}
+.tag.red{background:rgba(239,68,68,.13);color:var(--red);border:1px solid rgba(239,68,68,.35)}
+.tag.purple{background:rgba(168,85,247,.13);color:var(--purple);border:1px solid rgba(168,85,247,.35)}
+
+/* Details / accordion */
+details{
+  background:rgba(15,23,42,.75);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:14px 18px;
+  margin-bottom:12px;
+  transition:border-color .25s ease;
+}
+details[open]{border-color:rgba(0,212,255,.45)}
+details summary{
+  cursor:pointer;font-weight:700;color:#fff;font-size:.92rem;
+  list-style:none;display:flex;align-items:center;gap:10px;
+}
+details summary::-webkit-details-marker{display:none}
+details summary::before{
+  content:"+";
+  display:inline-flex;align-items:center;justify-content:center;
+  width:22px;height:22px;border-radius:6px;
+  background:rgba(0,212,255,.14);border:1px solid rgba(0,212,255,.4);
+  color:var(--accent);font-weight:800;font-size:.85rem;flex:0 0 22px;
+  transition:transform .25s ease;
+}
+details[open] summary::before{content:"−";transform:rotate(180deg)}
+details .dbody{margin-top:12px;color:#c3d0e2;font-size:.9rem;padding-left:32px}
+
+/* Reveal solution */
+.reveal-btn{
+  background:rgba(34,197,94,.1);
+  border:1px solid rgba(34,197,94,.45);
+  color:var(--green);
+  font-family:inherit;font-weight:700;font-size:.8rem;
+  padding:8px 16px;border-radius:20px;cursor:pointer;
+  transition:all .22s ease;margin-top:10px;
+  letter-spacing:.3px;
+}
+.reveal-btn:hover{background:rgba(34,197,94,.2);box-shadow:0 0 16px rgba(34,197,94,.3)}
+.solution{
+  display:none;margin-top:12px;
+  background:rgba(34,197,94,.07);
+  border-left:3px solid var(--green);
+  padding:12px 16px;border-radius:0 8px 8px 0;
+  font-size:.89rem;color:#cdf0da;
+}
+.solution.show{display:block;animation:fadeUp .3s ease}
+
+/* Fuentes */
+.source-card{
+  display:flex;gap:14px;align-items:flex-start;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:18px;margin-bottom:14px;
+  transition:border-color .25s ease,transform .25s ease;
+}
+.source-card:hover{border-color:var(--green);transform:translateY(-2px)}
+.source-card .sicon{
+  width:42px;height:42px;flex:0 0 42px;border-radius:10px;
+  background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.4);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;
+}
+.source-card .sbody{min-width:0;flex:1}
+.source-card .stitle{font-weight:700;color:#fff;font-size:.94rem;margin-bottom:6px;line-height:1.4}
+.source-card .sdesc{font-size:.82rem;color:var(--muted);margin-bottom:8px}
+.source-card a{
+  color:var(--green);font-size:.78rem;word-break:break-all;
+  text-decoration:none;border-bottom:1px dashed rgba(34,197,94,.5);
+  transition:color .2s ease;
+}
+.source-card a:hover{color:#4ade80}
+
+/* Credits */
+.credits-box{
+  background:linear-gradient(160deg,rgba(15,23,42,.95),rgba(10,14,26,.95));
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:28px 22px;
+  text-align:center;
+  margin-top:24px;
+  box-shadow:0 0 40px rgba(168,85,247,.1);
+}
+.credits-box h3{
+  font-size:1.35rem;font-weight:800;color:#fff;margin-bottom:6px;
+  letter-spacing:-.4px;
+}
+.credits-box .cname{
+  font-size:1.12rem;font-weight:800;
+  background:linear-gradient(120deg,var(--accent),var(--purple));
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+  margin:14px 0 4px;
+}
+.credits-box .cmeta{color:var(--muted);font-size:.85rem;margin-bottom:4px}
+.credits-box .cnote{
+  margin-top:18px;font-size:.86rem;color:#c3d0e2;
+  border-top:1px solid var(--border);padding-top:16px;
+}
+.credits-box .latin{
+  margin-top:14px;font-style:italic;
+  color:var(--amber);font-size:.92rem;letter-spacing:.4px;
+}
+
+/* Footer */
+.footer{
+  text-align:center;
+  padding:34px 18px 44px;
+  border-top:1px solid var(--border);
+  color:var(--muted);
+  font-size:.82rem;
+  line-height:2;
+  background:linear-gradient(180deg,transparent,rgba(15,23,42,.5));
+}
+.footer .f-latin{color:var(--amber);font-style:italic;margin-top:8px;display:block;font-size:.86rem}
+
+/* Back to top */
+#toTop{
+  position:fixed;right:16px;bottom:16px;
+  width:46px;height:46px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--purple));
+  color:#04121c;border:none;cursor:pointer;
+  font-size:1.1rem;font-weight:800;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 6px 24px rgba(0,212,255,.35);
+  opacity:0;pointer-events:none;
+  transform:translateY(14px);
+  transition:all .3s ease;
+  z-index:1150;
+}
+#toTop.show{opacity:1;pointer-events:auto;transform:translateY(0)}
+#toTop:hover{transform:translateY(-3px) scale(1.06)}
+
+/* Misc */
+.kv{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.kv .chip{font-size:.72rem}
+.hl-cyan{color:var(--accent);font-weight:700}
+.hl-green{color:var(--green);font-weight:700}
+.hl-amber{color:var(--amber);font-weight:700}
+.hl-purple{color:var(--purple);font-weight:700}
+.mono{
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  background:rgba(0,212,255,.09);
+  border:1px solid rgba(0,212,255,.25);
+  padding:2px 7px;border-radius:5px;
+  font-size:.84rem;color:var(--accent);
+  word-break:break-word;
+}
+.path-flow{
+  display:flex;flex-wrap:wrap;align-items:center;gap:8px;
+  margin:14px 0;font-size:.84rem;font-weight:700;
+}
+.path-flow .pn{
+  background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.35);
+  color:var(--accent);padding:6px 12px;border-radius:8px;
+}
+.path-flow .ar{color:var(--muted)}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width:768px){
+  .section{padding:20px 12px 80px}
+  .card{padding:17px}
+  .nav-btn{font-size:.76rem;padding:6px 11px}
+  .hero-svg-wrap{border-radius:10px;margin-bottom:20px}
+  .metrics{grid-template-columns:repeat(2,1fr);gap:10px}
+  .metric .val{font-size:1.25rem}
+  .metric{padding:14px 8px}
+  .quote-box{padding:14px 16px;font-size:.9rem}
+  table{font-size:.8rem;min-width:400px}
+  thead th,tbody td{padding:9px 10px}
+}
+@media (max-width:420px){
+  .home-head h1{font-size:1.85rem}
+  .metrics{grid-template-columns:1fr 1fr}
+  .metric .val{font-size:1.1rem}
+  .metric .lbl{font-size:.62rem;letter-spacing:.8px}
+  .chip{font-size:.68rem;padding:5px 10px}
+  ol.steps li{padding-left:40px}
+  ol.steps li::before{width:26px;height:26px;font-size:.75rem}
+  #toTop{width:42px;height:42px;right:12px;bottom:12px}
+}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.08s !important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<div id="progressBar"></div>
+
+<nav class="navbar" aria-label="Navegación principal">
+  <div class="nav-inner" id="navInner">
+    <button class="nav-btn active" data-target="home">◆ Inicio</button>
+    <button class="nav-btn" data-target="intro">1 · Ecosistema</button>
+    <button class="nav-btn" data-target="acceso">2 · Acceso Global</button>
+    <button class="nav-btn" data-target="config">3 · Agente Alvi</button>
+    <button class="nav-btn" data-target="multimedia">4 · Multimedia</button>
+    <button class="nav-btn" data-target="dev">5 · Apps &amp; Gaming</button>
+    <button class="nav-btn" data-target="goals">6 · Goals &amp; Compras</button>
+    <button class="nav-btn" data-target="cierre">7 · Cierre</button>
+    <button class="nav-btn src-btn" data-target="fuentes">🔗 Fuentes</button>
+    <button class="nav-btn credits-btn" data-target="creditos">★ Créditos</button>
+  </div>
+</nav>
+
+<main>
+
+<!-- ================= HOME ================= -->
+<section id="home" class="section active">
+
+  <div class="hero-svg-wrap">
+    <svg id="heroSvg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 800 450" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Portada animada de Muse AI: el usuario delega en el agente, el agente ejecuta en su Linux VM y entrega resultados">
+      <defs>
+        <!-- Fondo animado -->
+        <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#070b14">
+            <animate attributeName="stop-color" values="#070b14;#0b1a2e;#070b14;#0a1224;#070b14" dur="13s" repeatCount="indefinite"/>
+          </stop>
+          <stop offset="50%" stop-color="#0a0e1a">
+            <animate attributeName="stop-color" values="#0a0e1a;#12324f;#0a0e1a;#0e2038;#0a0e1a" dur="9.5s" repeatCount="indefinite"/>
+          </stop>
+          <stop offset="100%" stop-color="#0f172a">
+            <animate attributeName="stop-color" values="#0f172a;#1a1030;#0f172a;#0a1f2e;#0f172a" dur="15.5s" repeatCount="indefinite"/>
+          </stop>
+        </linearGradient>
+
+        <radialGradient id="vignette" cx="50%" cy="50%" r="72%">
+          <stop offset="55%" stop-color="#000000" stop-opacity="0"/>
+          <stop offset="100%" stop-color="#000000" stop-opacity="0.55"/>
+        </radialGradient>
+
+        <pattern id="gridPat" width="32" height="32" patternUnits="userSpaceOnUse">
+          <path d="M32 0 H0 V32" fill="none" stroke="#1e3a5f" stroke-width="0.6"/>
+        </pattern>
+
+        <filter id="glow" x="-70%" y="-70%" width="240%" height="240%">
+          <feGaussianBlur stdDeviation="3.5" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="glowBig" x="-90%" y="-90%" width="280%" height="280%">
+          <feGaussianBlur stdDeviation="8" result="b"/>
+          <feMerge>
+            <feMergeNode in="b"/>
+            <feMergeNode in="b"/>
+            <feMergeNode in="SourceGraphic"/>
+          </feMerge>
+        </filter>
+
+        <radialGradient id="haloCyan">
+          <stop offset="0%" stop-color="#00d4ff" stop-opacity="0.85"/>
+          <stop offset="45%" stop-color="#00d4ff" stop-opacity="0.22"/>
+          <stop offset="100%" stop-color="#00d4ff" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="haloPurple">
+          <stop offset="0%" stop-color="#a855f7" stop-opacity="0.65"/>
+          <stop offset="100%" stop-color="#a855f7" stop-opacity="0"/>
+        </radialGradient>
+
+        <linearGradient id="coreGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#00d4ff">
+            <animate attributeName="stop-color" values="#00d4ff;#a855f7;#22c55e;#f59e0b;#00d4ff" dur="11s" repeatCount="indefinite"/>
+          </stop>
+          <stop offset="100%" stop-color="#a855f7">
+            <animate attributeName="stop-color" values="#a855f7;#00d4ff;#f59e0b;#22c55e;#a855f7" dur="11s" repeatCount="indefinite"/>
+          </stop>
+        </linearGradient>
+
+        <linearGradient id="titleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#ffffff">
+            <animate attributeName="stop-color" values="#ffffff;#00d4ff;#a855f7;#22c55e;#ffffff" dur="14s" repeatCount="indefinite"/>
+          </stop>
+          <stop offset="50%" stop-color="#00d4ff">
+            <animate attributeName="stop-color" values="#00d4ff;#a855f7;#22c55e;#f59e0b;#00d4ff" dur="14s" repeatCount="indefinite"/>
+          </stop>
+          <stop offset="100%" stop-color="#a855f7">
+            <animate attributeName="stop-color" values="#a855f7;#22c55e;#f59e0b;#00d4ff;#a855f7" dur="14s" repeatCount="indefinite"/>
+          </stop>
+        </linearGradient>
+
+        <!-- Rutas de flujo -->
+        <path id="pathIn"  d="M160,265 C 230,265 290,265 354,265" fill="none"/>
+        <path id="pathApp" d="M448,248 C 530,215 608,170 678,148" fill="none"/>
+        <path id="pathVid" d="M450,265 C 550,265 610,265 678,265" fill="none"/>
+        <path id="pathPod" d="M448,282 C 530,315 608,360 678,382" fill="none"/>
+      </defs>
+
+      <!-- ====== FONDO ====== -->
+      <rect x="0" y="0" width="800" height="450" fill="url(#bgGrad)"/>
+      <rect x="0" y="0" width="800" height="450" fill="url(#gridPat)">
+        <animate attributeName="opacity" values="0.16;0.55;0.16" dur="7s" repeatCount="indefinite"/>
+      </rect>
+      <rect x="0" y="0" width="800" height="450" fill="url(#vignette)"/>
+
+      <!-- Líneas de barrido -->
+      <g opacity="0.25">
+        <rect x="0" y="0" width="800" height="1.2" fill="#00d4ff">
+          <animate attributeName="y" values="-5;455;-5" dur="9s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0;0.8;0" dur="9s" repeatCount="indefinite"/>
+        </rect>
+        <rect x="0" y="0" width="800" height="1" fill="#a855f7">
+          <animate attributeName="y" values="455;-5;455" dur="13s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0;0.6;0" dur="13s" repeatCount="indefinite"/>
+        </rect>
+      </g>
+
+      <!-- ====== ANILLOS ORBITALES ====== -->
+      <g transform="translate(400,265)">
+        <circle r="95" fill="none" stroke="#00d4ff" stroke-width="1.2" stroke-dasharray="5 12" opacity="0.42">
+          <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="18s" repeatCount="indefinite"/>
+          <animate attributeName="stroke-dasharray" values="5 12;2 20;5 12" dur="6.5s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0.25;0.55;0.25" dur="5s" repeatCount="indefinite"/>
+        </circle>
+        <circle r="130" fill="none" stroke="#a855f7" stroke-width="1" stroke-dasharray="3 16" opacity="0.35">
+          <animateTransform attributeName="transform" type="rotate" from="360" to="0" dur="26s" repeatCount="indefinite"/>
+          <animate attributeName="stroke-dasharray" values="3 16;10 8;3 16" dur="9s" repeatCount="indefinite"/>
+        </circle>
+        <circle r="165" fill="none" stroke="#22c55e" stroke-width="0.8" stroke-dasharray="14 22" opacity="0.22">
+          <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="40s" repeatCount="indefinite"/>
+          <animate attributeName="stroke-dasharray" values="14 22;4 30;14 22" dur="12s" repeatCount="indefinite"/>
+        </circle>
+
+        <!-- Sondas orbitales -->
+        <circle r="3.5" fill="#00d4ff" filter="url(#glow)">
+          <animateMotion dur="7s" repeatCount="indefinite" path="M95,0 A95,95 0 1,1 -95,0 A95,95 0 1,1 95,0"/>
+          <animate attributeName="opacity" values="1;0.4;1" dur="2.4s" repeatCount="indefinite"/>
+        </circle>
+        <circle r="3" fill="#f59e0b" filter="url(#glow)">
+          <animateMotion dur="11s" repeatCount="indefinite" path="M130,0 A130,130 0 1,0 -130,0 A130,130 0 1,0 130,0"/>
+        </circle>
+        <circle r="2.6" fill="#22c55e" filter="url(#glow)">
+          <animateMotion dur="15s" repeatCount="indefinite" path="M165,0 A165,165 0 1,1 -165,0 A165,165 0 1,1 165,0"/>
+        </circle>
+      </g>
+
+      <!-- ====== RUTAS DE FLUJO ====== -->
+      <g stroke-linecap="round" fill="none">
+        <path d="M160,265 C 230,265 290,265 354,265" stroke="#00d4ff" stroke-width="1.6" opacity="0.32" stroke-dasharray="5 9">
+          <animate attributeName="stroke-dashoffset" from="0" to="-28" dur="1.6s" repeatCount="indefinite"/>
+        </path>
+        <path d="M448,248 C 530,215 608,170 678,148" stroke="#22c55e" stroke-width="1.4" opacity="0.28" stroke-dasharray="4 10">
+          <animate attributeName="stroke-dashoffset" from="0" to="-28" dur="1.9s" repeatCount="indefinite"/>
+        </path>
+        <path d="M450,265 C 550,265 610,265 678,265" stroke="#00d4ff" stroke-width="1.4" opacity="0.28" stroke-dasharray="4 10">
+          <animate attributeName="stroke-dashoffset" from="0" to="-28" dur="2.1s" repeatCount="indefinite"/>
+        </path>
+        <path d="M448,282 C 530,315 608,360 678,382" stroke="#a855f7" stroke-width="1.4" opacity="0.28" stroke-dasharray="4 10">
+          <animate attributeName="stroke-dashoffset" from="0" to="-28" dur="2.4s" repeatCount="indefinite"/>
+        </path>
+      </g>
+
+      <!-- ====== PARTÍCULAS VIAJERAS ====== -->
+      <circle r="3.4" fill="#00d4ff" filter="url(#glow)">
+        <animateMotion dur="2.8s" repeatCount="indefinite" begin="0s"><mpath xlink:href="#pathIn"/></animateMotion>
+      </circle>
+      <circle r="2.6" fill="#7fe6ff" filter="url(#glow)">
+        <animateMotion dur="3.4s" repeatCount="indefinite" begin="1.2s"><mpath xlink:href="#pathIn"/></animateMotion>
+      </circle>
+
+      <circle r="3" fill="#22c55e" filter="url(#glow)">
+        <animateMotion dur="3.1s" repeatCount="indefinite" begin="0.4s"><mpath xlink:href="#pathApp"/></animateMotion>
+      </circle>
+      <circle r="3" fill="#00d4ff" filter="url(#glow)">
+        <animateMotion dur="3.6s" repeatCount="indefinite" begin="0.9s"><mpath xlink:href="#pathVid"/></animateMotion>
+      </circle>
+      <circle r="3" fill="#a855f7" filter="url(#glow)">
+        <animateMotion dur="4.2s" repeatCount="indefinite" begin="1.6s"><mpath xlink:href="#pathPod"/></animateMotion>
+      </circle>
+
+      <!-- ====== GHOST ELEMENTS ====== -->
+      <circle r="7" fill="#00d4ff" opacity="0">
+        <animateMotion dur="4.6s" repeatCount="indefinite" begin="0.2s"><mpath xlink:href="#pathIn"/></animateMotion>
+        <animate attributeName="opacity" values="0;0.55;0.55;0" keyTimes="0;0.12;0.8;1" dur="4.6s" repeatCount="indefinite"/>
+      </circle>
+      <circle r="6" fill="#22c55e" opacity="0">
+        <animateMotion dur="5.2s" repeatCount="indefinite" begin="1.5s"><mpath xlink:href="#pathApp"/></animateMotion>
+        <animate attributeName="opacity" values="0;0.5;0.5;0" keyTimes="0;0.14;0.78;1" dur="5.2s" repeatCount="indefinite"/>
+      </circle>
+      <circle r="6" fill="#a855f7" opacity="0">
+        <animateMotion dur="5.8s" repeatCount="indefinite" begin="2.6s"><mpath xlink:href="#pathPod"/></animateMotion>
+        <animate attributeName="opacity" values="0;0.5;0.5;0" keyTimes="0;0.14;0.78;1" dur="5.8s" repeatCount="indefinite"/>
+      </circle>
+
+      <!-- ====== NODO USUARIO ====== -->
+      <g transform="translate(95,265)">
+        <g>
+          <animateTransform attributeName="transform" type="translate" values="0,0;0,-4;0,0" dur="3.6s" repeatCount="indefinite"/>
+          <rect x="-64" y="-31" width="128" height="62" rx="12" fill="#0f172a" stroke="#1e3a5f" stroke-width="1.5"/>
+          <rect x="-64" y="-31" width="128" height="62" rx="12" fill="none" stroke="#00d4ff" stroke-width="1" opacity="0.45">
+            <animate attributeName="opacity" values="0.45;0.08;0.45" dur="3s" repeatCount="indefinite"/>
+          </rect>
+          <text x="0" y="-1" text-anchor="middle" font-family="'Segoe UI',system-ui,sans-serif" font-size="13" font-weight="700" fill="#e2e8f0">TÚ</text>
+          <text x="0" y="15" text-anchor="middle" font-family="'Segoe UI',system-ui,sans-serif" font-size="8.5" fill="#94a3b8" letter-spacing="1">ORDEN · IDEA</text>
+          <circle r="42" fill="none" stroke="#00d4ff" stroke-width="1">
+            <animate attributeName="r" values="38;52;38" dur="3.6s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0.55;0;0.55" dur="3.6s" repeatCount="indefinite"/>
+          </circle>
+        </g>
+      </g>
+
+      <!-- ====== AGENTE CENTRAL ====== -->
+      <g transform="translate(400,265)">
+        <circle r="72" fill="url(#haloCyan)" opacity="0.55">
+          <animate attributeName="r" values="62;82;62" dur="4.2s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0.35;0.7;0.35" dur="4.2s" repeatCount="indefinite"/>
+        </circle>
+        <circle r="94" fill="url(#haloPurple)" opacity="0.3">
+          <animate attributeName="r" values="88;108;88" dur="6.4s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0.15;0.4;0.15" dur="6.4s" repeatCount="indefinite"/>
+        </circle>
+
+        <!-- Hexágono exterior giratorio -->
+        <polygon points="58,0 29,50.2 -29,50.2 -58,0 -29,-50.2 29,-50.2" fill="none" stroke="#00d4ff" stroke-width="1" stroke-dasharray="6 8" opacity="0.5">
+          <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="20s" repeatCount="indefinite"/>
+        </polygon>
+        <polygon points="50,0 25,43.3 -25,43.3 -50,0 -25,-43.3 25,-43.3" fill="none" stroke="#a855f7" stroke-width="0.8" stroke-dasharray="3 7" opacity="0.45">
+          <animateTransform attributeName="transform" type="rotate" from="360" to="0" dur="26s" repeatCount="indefinite"/>
+        </polygon>
+
+        <!-- Hexágono principal -->
+        <polygon points="46,0 23,39.8 -23,39.8 -46,0 -23,-39.8 23,-39.8" fill="#0f172a" stroke="url(#coreGrad)" stroke-width="2.4" filter="url(#glow)"/>
+        <polygon points="38,0 19,32.9 -19,32.9 -38,0 -19,-32.9 19,-32.9" fill="none" stroke="#00d4ff" stroke-width="0.8" opacity="0.35"/>
+
+        <text x="0" y="-3" text-anchor="middle" font-family="'Segoe UI',system-ui,sans-serif" font-size="12" font-weight="800" fill="#00d4ff" letter-spacing="1" filter="url(#glow)">MUSE</text>
+        <text x="0" y="12" text-anchor="middle" font-family="'Segoe UI',system-ui,sans-serif" font-size="9" font-weight="700" fill="#a855f7" letter-spacing="2">AI</text>
+
+        <!-- Núcleo pulsante -->
+        <circle r="7" fill="#00d4ff" opacity="0.85" filter="url(#glowBig)">
+          <animate attributeName="r" values="5;9;5" dur="2.2s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0.5;1;0.5" dur="2.2s" repeatCount="indefinite"/>
+        </circle>
+
+        <!-- Etiqueta Linux VM -->
+        <text x="0" y="72" text-anchor="middle" font-family="'Segoe UI',system-ui,sans-serif" font-size="9.5" font-weight="700" fill="#22c55e" letter-spacing="1.4" opacity="0.9">
+          LINUX VM · 24/7
+          <animate attributeName="opacity" values="0.9;0.35;0.9" dur="3.2s" repeatCount="indefinite"/>
+        </text>
+      </g>
+
+      <!-- ====== NODOS DE SALIDA ====== -->
+      <!-- APPS -->
+      <g transform="translate(728,148)">
+        <g>
+          <animateTransform attributeName="transform" type="translate" values="0,0;0,-4;0,0" dur="3.1s" repeatCount="indefinite"/>
+          <rect x="-50" y="-28" width="100" height="56" rx="12" fill="#0f172a" stroke="#22c55e" stroke-width="1.5"/>
+          <text x="0" y="-2" text-anchor="middle" font-family="'Segoe UI',system-ui,sans-serif" font-size="12" font-weight="800" fill="#22c55e" letter-spacing="1">APPS</text>
+          <text x="0" y="14" text-anchor="middle" font-family="'Segoe UI',system-ui,sans-serif" font-size="8" fill="#94a3b8" letter-spacing="0.6">artefactos</text>
+          <rect x="-50" y="-28" width="100" height="56" rx="12" fill="none" stroke="#22c55e" stroke-width="1">
+            <animate attributeName="x" values="-50;-58;-50" dur="4s" repeatCount="indefinite"/>
+            <animate attributeName="y" values="-28;-36;-28" dur="4s" repeatCount="indefinite"/>
+            <animate attributeName="width" values="100;116;100" dur="4s" repeatCount="indefinite"/>
+            <animate attributeName="height" values="56;72;56" dur="4s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0.5;0;0.5" dur="4s" repeatCount="indefinite"/>
+          </rect>
+        </g>
+      </g>
+
+      <!-- VÍDEO -->
+      <g transform="translate(728,265)">
+        <g>
+          <animateTransform attributeName="transform" type="translate" values="0,0;0,-4;0,0" dur="3.9s" repeatCount="indefinite"/>
+          <rect x="-50" y="-28" width="100" height="56" rx="12" fill="#0f172a" stroke="#00d4ff" stroke-width="1.5"/>
+          <text x="0" y="-2" text-anchor="middle" font-family="'Segoe UI',system-ui,sans-serif" font-size="12" font-weight="800" fill="#00d4ff" letter-spacing="1">VÍDEO</text>
+          <text x="0" y="14" text-anchor="middle" font-family="'Segoe UI',system-ui,sans-serif" font-size="8" fill="#94a3b8" letter-spacing="0.6">+ avatares</text>
+          <rect x="-50" y="-28" width="100" height="56" rx="12" fill="none" stroke="#00d4ff" stroke-width="1">
+            <animate attributeName="x" values="-50;-58;-50" dur="4.6s" repeatCount="indefinite"/>
+            <animate attributeName="y" values="-28;-36;-28" dur="4.6s" repeatCount="indefinite"/>
+            <animate attributeName="width" values="100;116;100" dur="4.6s" repeatCount="indefinite"/>
+            <animate attributeName="height" values="56;72;56" dur="4.6s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0.5;0;0.5" dur="4.6s" repeatCount="indefinite"/>
+          </rect>
+        </g>
+      </g>
+
+      <!-- PODCAST -->
+      <g transform="translate(728,382)">
+        <g>
+          <animateTransform attributeName="transform" type="translate" values="0,0;0,-4;0,0" dur="4.4s" repeatCount="indefinite"/>
+          <rect x="-50" y="-28" width="100" height="56" rx="12" fill="#0f172a" stroke="#a855f7" stroke-width="1.5"/>
+          <text x="0" y="-2" text-anchor="middle" font-family="'Segoe UI',system-ui,sans-serif" font-size="12" font-weight="800" fill="#a855f7" letter-spacing="1">PODCAST</text>
+          <text x="0" y="14" text-anchor="middle" font-family="'Segoe UI',system-ui,sans-serif" font-size="8" fill="#94a3b8" letter-spacing="0.6">Lucía &amp; Marcos</text>
+          <rect x="-50" y="-28" width="100" height="56" rx="12" fill="none" stroke="#a855f7" stroke-width="1">
+            <animate attributeName="x" values="-50;-58;-50" dur="5.2s" repeatCount="indefinite"/>
+            <animate attributeName="y" values="-28;-36;-28" dur="5.2s" repeatCount="indefinite"/>
+            <animate attributeName="width" values="100;116;100" dur="5.2s" repeatCount="indefinite"/>
+            <animate attributeName="height" values="56;72;56" dur="5.2s" repeatCount="indefinite"/>
+            <animate attributeName="opacity" values="0.5;0;0.5" dur="5.2s" repeatCount="indefinite"/>
+          </rect>
+        </g>
+      </g>
+
+      <!-- ====== EXPLOSIONES RADIALES EN IMPACTO ====== -->
+      <g transform="translate(678,265)">
+        <g opacity="0">
+          <animate attributeName="opacity" values="0;0;0.9;0;0" keyTimes="0;0.6;0.66;0.78;1" dur="6s" repeatCount="indefinite"/>
+          <line x1="0" y1="0" x2="22" y2="0" stroke="#00d4ff" stroke-width="1.6"/>
+          <line x1="0" y1="0" x2="-22" y2="0" stroke="#00d4ff" stroke-width="1.6"/>
+          <line x1="0" y1="0" x2="0" y2="22" stroke="#00d4ff" stroke-width="1.6"/>
+          <line x1="0" y1="0" x2="0" y2="-22" stroke="#00d4ff" stroke-width="1.6"/>
+          <line x1="0" y1="0" x2="16" y2="16" stroke="#00d4ff" stroke-width="1.2"/>
+          <line x1="0" y1="0" x2="-16" y2="-16" stroke="#00d4ff" stroke-width="1.2"/>
+          <line x1="0" y1="0" x2="16" y2="-16" stroke="#00d4ff" stroke-width="1.2"/>
+          <line x1="0" y1="0" x2="-16" y2="16" stroke="#00d4ff" stroke-width="1.2"/>
+          <animateTransform attributeName="transform" type="scale" values="0.4;0.4;1.5;2.2;2.2" keyTimes="0;0.6;0.7;0.8;1" dur="6s" repeatCount="indefinite" additive="sum"/>
+        </g>
+      </g>
+      <g transform="translate(678,148)">
+        <g opacity="0">
+          <animate attributeName="opacity" values="0;0;0.9;0;0" keyTimes="0;0.72;0.78;0.9;1" dur="7s" repeatCount="indefinite"/>
+          <line x1="0" y1="0" x2="18" y2="0" stroke="#22c55e" stroke-width="1.5"/>
+          <line x1="0" y1="0" x2="-18" y2="0" stroke="#22c55e" stroke-width="1.5"/>
+          <line x1="0" y1="0" x2="0" y2="18" stroke="#22c55e" stroke-width="1.5"/>
+          <line x1="0" y1="0" x2="0" y2="-18" stroke="#22c55e" stroke-width="1.5"/>
+          <line x1="0" y1="0" x2="13" y2="13" stroke="#22c55e" stroke-width="1.1"/>
+          <line x1="0" y1="0" x2="-13" y2="-13" stroke="#22c55e" stroke-width="1.1"/>
+          <animateTransform attributeName="transform" type="scale" values="0.4;0.4;1.4;2;2" keyTimes="0;0.72;0.8;0.9;1" dur="7s" repeatCount="indefinite" additive="sum"/>
+        </g>
+      </g>
+
+      <!-- ====== TÍTULOS ====== -->
+      <text x="400" y="42" text-anchor="middle" font-family="'Segoe UI',system-ui,sans-serif" font-size="34" font-weight="800" fill="url(#titleGrad)" letter-spacing="4" filter="url(#glow)">
+        MUSE AI
+      </text>
+      <text x="400" y="66" text-anchor="middle" font-family="'Segoe UI',system-ui,sans-serif" font-size="11.5" fill="#94a3b8" letter-spacing="3.4">
+        EL AGENTE PERSONAL DEFINITIVO
+        <animate attributeName="opacity" values="0.85;0.35;0.85" dur="4.5s" repeatCount="indefinite"/>
+      </text>
+
+      <!-- Línea bajo el título -->
+      <line x1="300" y1="78" x2="500" y2="78" stroke="#00d4ff" stroke-width="1.2" opacity="0.55">
+        <animate attributeName="x1" values="300;250;300" dur="6s" repeatCount="indefinite"/>
+        <animate attributeName="x2" values="500;550;500" dur="6s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.2;0.7;0.2" dur="6s" repeatCount="indefinite"/>
+      </line>
+
+      <!-- ====== FLASH CENTRAL ====== -->
+      <text x="400" y="102" text-anchor="middle" font-family="'Segoe UI',system-ui,sans-serif" font-size="15" font-weight="800" fill="#f59e0b" letter-spacing="3" opacity="0" filter="url(#glowBig)">
+        ¡EJECUTANDO!
+        <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.68;0.73;0.82;0.88;1" dur="9s" repeatCount="indefinite"/>
+        <animate attributeName="font-size" values="13;13;18;18;13;13" keyTimes="0;0.68;0.75;0.82;0.88;1" dur="9s" repeatCount="indefinite"/>
+      </text>
+
+      <!-- ====== BADGE LIVE ====== -->
+      <g transform="translate(760,26)">
+        <g>
+          <animateTransform attributeName="transform" type="translate" values="0,0;0,-3;0,0" dur="2.6s" repeatCount="indefinite"/>
+          <rect x="-58" y="-14" width="60" height="26" rx="13" fill="rgba(239,68,68,.14)" stroke="#ef4444" stroke-width="1"/>
+          <circle cx="-42" cy="0" r="4.5" fill="#ef4444" filter="url(#glow)">
+            <animate attributeName="opacity" values="1;0.2;1" dur="1.4s" repeatCount="indefinite"/>
+            <animate attributeName="r" values="4.5;6;4.5" dur="1.4s" repeatCount="indefinite"/>
+          </circle>
+          <text x="4" y="4" text-anchor="middle" font-family="'Segoe UI',system-ui,sans-serif" font-size="10" font-weight="800" fill="#ef4444" letter-spacing="2">LIVE</text>
+        </g>
+      </g>
+
+      <!-- ====== ETIQUETA SUPERIOR IZQUIERDA ====== -->
+      <text x="26" y="30" font-family="'Segoe UI',system-ui,sans-serif" font-size="9" font-weight="700" fill="#1e3a5f" letter-spacing="2.4">
+        META · 2026
+        <animate attributeName="fill" values="#1e3a5f;#00d4ff;#1e3a5f" dur="8s" repeatCount="indefinite"/>
+      </text>
+
+      <!-- ====== TICKER DE ESTADO ====== -->
+      <g transform="translate(26,432)" font-family="'Segoe UI',system-ui,sans-serif" font-size="10" font-weight="700" letter-spacing="2">
+        <text x="0" y="0" fill="#00d4ff" opacity="0">
+          ▸ PENSANDO
+          <animate attributeName="opacity" values="0;1;1;0;0;0" keyTimes="0;0.02;0.3;0.33;0.34;1" dur="9s" repeatCount="indefinite"/>
+        </text>
+        <text x="0" y="0" fill="#f59e0b" opacity="0">
+          ▸ EJECUTANDO
+          <animate attributeName="opacity" values="0;0;1;1;0;0" keyTimes="0;0.33;0.36;0.63;0.66;1" dur="9s" repeatCount="indefinite"/>
+        </text>
+        <text x="0" y="0" fill="#22c55e" opacity="0">
+          ▸ ENTREGANDO
+          <animate attributeName="opacity" values="0;0;0;1;1;0" keyTimes="0;0.66;0.68;0.70;0.96;1" dur="9s" repeatCount="indefinite"/>
+        </text>
+      </g>
+
+      <!-- ====== FIRMA ====== -->
+      <text x="774" y="432" text-anchor="end" font-family="'Segoe UI',system-ui,sans-serif" font-size="10" font-weight="600" fill="#94a3b8" letter-spacing="1.2">
+        Rubén Sbarsky
+        <animate attributeName="opacity" values="0.35;0.95;0.35" dur="5.5s" repeatCount="indefinite"/>
+      </text>
+
+      <!-- Esquinas decorativas -->
+      <g stroke="#00d4ff" stroke-width="1.4" opacity="0.55" fill="none">
+        <path d="M8,8 L36,8 M8,8 L8,36"/>
+        <path d="M792,8 L764,8 M792,8 L792,36"/>
+        <path d="M8,442 L36,442 M8,442 L8,414"/>
+        <path d="M792,442 L764,442 M792,442 L792,414"/>
+      </g>
+    </svg>
+  </div>
+
+  <div class="home-head">
+    <span class="badge">Meta · Inteligencia Artificial · Agente Autónomo</span>
+    <h1>Muse AI: El agente personal definitivo</h1>
+    <h2>Guía completa de acceso, configuración y dominio del ecosistema</h2>
+    <p class="home-desc">
+      Meta ha dado un golpe de autoridad definitivo en la carrera de la inteligencia artificial con el lanzamiento de Muse AI.
+      Mientras la industria se enfocaba en chatbots que simplemente responden preguntas, Mark Zuckerberg ha presentado una
+      herramienta que marca un hito estratégico: el primer agente personal capaz de actuar de forma autónoma.
+    </p>
+  </div>
+
+  <div class="quote-box">
+    "Si no puedes explicarlo de forma sencilla, es que no lo entiendes lo suficientemente bien."
+    <span>— PRINCIPIO RECTOR DE ESTE TUTORIAL</span>
+  </div>
+
+  <div class="metrics">
+    <div class="metric"><span class="val">100M</span><span class="lbl">Tokens / semana</span></div>
+    <div class="metric"><span class="val">24/7</span><span class="lbl">Linux VM en la nube</span></div>
+    <div class="metric"><span class="val">7–10%</span><span class="lbl">Coste por videojuego</span></div>
+    <div class="metric"><span class="val">0 €</span><span class="lbl">Coste de acceso</span></div>
+  </div>
+
+  <div class="date-strip">
+    <span class="chip accent">📅 14/09/2026</span>
+    <span class="chip">🕐 05:42:16</span>
+    <span class="chip">👨‍💻 Rubén Sbarsky</span>
+    <span class="chip">📚 Tutorial educativo</span>
+  </div>
+
+</section>
+
+<!-- ================= 1. INTRO ================= -->
+<section id="intro" class="section">
+  <div class="sec-header">
+    <span class="kicker">Capítulo 01</span>
+    <h2>Introducción al Ecosistema de Muse AI</h2>
+    <p>Qué es, para qué sirve y por qué cambia la forma de trabajar con inteligencia artificial.</p>
+  </div>
+
+  <div class="card">
+    <h3><span class="ico">◈</span> El golpe de autoridad de Meta</h3>
+    <p>
+      Meta ha dado un golpe de autoridad definitivo en la carrera de la inteligencia artificial con el lanzamiento de
+      <strong class="hl-cyan">Muse AI</strong>. Mientras la industria se enfocaba en chatbots que simplemente responden preguntas,
+      Mark Zuckerberg ha presentado una herramienta que marca un hito estratégico: el primer agente personal capaz de actuar
+      de forma autónoma.
+    </p>
+    <p>
+      Lo más sorprendente es su <strong>generosidad técnica</strong>, ya que democratiza el acceso a la potencia de cálculo
+      regalando <strong class="hl-green">100 millones de tokens renovables semanalmente por cuenta</strong>.
+    </p>
+    <p>
+      A diferencia de otras IA, Muse AI <strong>no consume los recursos de su ordenador</strong>; opera a través de una
+      <strong class="hl-purple">máquina virtual de Linux privada en la nube</strong>. Imagine esto como su propia
+      "oficina digital" que permanece abierta las 24 horas, permitiendo que el agente instale software, gestione procesos
+      y ejecute tareas complejas de forma aislada y segura. Estamos ante una evolución donde la IA deja de ser un
+      interlocutor para convertirse en un <strong class="hl-amber">ejecutor</strong>.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3><span class="ico">?</span> ¿Qué es Muse AI y para qué sirve?</h3>
+    <p>
+      Muse AI es un <strong>agente personal diseñado para la ejecución delegada</strong>. Su propósito es que usted deje de
+      dar instrucciones y empiece a <strong class="hl-cyan">supervisar resultados</strong>.
+    </p>
+    <ul class="clean">
+      <li>Puede gestionar su bandeja de entrada.</li>
+      <li>Automatizar compras.</li>
+      <li>Planificar viajes completos tras una pérdida de conexión.</li>
+      <li>Desarrollar aplicaciones y videojuegos funcionales desde cero.</li>
+    </ul>
+    <div class="path-flow">
+      <span class="pn">DECIR</span>
+      <span class="ar">→</span>
+      <span class="pn" style="border-color:rgba(34,197,94,.5);color:#22c55e;background:rgba(34,197,94,.1)">HACER</span>
+      <span class="ar">→</span>
+      <span class="pn" style="border-color:rgba(168,85,247,.5);color:#a855f7;background:rgba(168,85,247,.1)">SUPERVISAR</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="ico">▲</span> La ventaja competitiva de dominar Muse AI</h3>
+    <div class="grid-3">
+      <div class="card" style="margin:0;background:rgba(0,212,255,.05)">
+        <h4>Automatización autónoma</h4>
+        <p>El agente puede delegar tareas a <strong>sub-agentes</strong> que trabajan en paralelo.</p>
+      </div>
+      <div class="card" style="margin:0;background:rgba(34,197,94,.05)">
+        <h4>Eficiencia de costes</h4>
+        <p>Acceso gratuito a una potencia que en otras plataformas (como <strong>GPT-4o</strong> o <strong>Astra</strong>) agotaría créditos costosos en minutos.</p>
+      </div>
+      <div class="card" style="margin:0;background:rgba(168,85,247,.05)">
+        <h4>Seguridad mediante Linux VM</h4>
+        <p>Las tareas pesadas ocurren en un entorno aislado, protegiendo su hardware y garantizando disponibilidad total.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="ico">▶</span> Casos de uso reales: Del pensamiento a la acción</h3>
+    <p>
+      Imagine pedirle a Muse AI que gestione un cambio de vuelo mientras usted descansa, o solicitarle que cree una
+      aplicación de organización de tareas para su equipo. <strong>No solo recibirá el código</strong>; recibirá la
+      aplicación funcionando en una <strong class="hl-cyan">ventana interactiva lista para usarse</strong>.
+    </p>
+    <div class="callout info">
+      <span class="ctag">Info</span>
+      <div>Este cambio del <strong>"decir"</strong> al <strong>"hacer"</strong> redefine la productividad. El usuario ya no es un redactor de prompts, sino un <strong>director de proyectos</strong>. Ahora que hemos comprendido el potencial de este cerebro digital, vamos a preparar su entorno para abrirle las puertas, sin importar en qué parte del mundo se encuentre.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 2. ACCESO ================= -->
+<section id="acceso" class="section">
+  <div class="sec-header">
+    <span class="kicker">Capítulo 02</span>
+    <h2>Guía Maestra de Acceso Global (Fuera de EE. UU.)</h2>
+    <p>Protocolo estricto para superar las barreras geográficas y evitar listas de espera permanentes.</p>
+  </div>
+
+  <div class="card">
+    <h3><span class="ico">◉</span> Contexto</h3>
+    <p>
+      Actualmente, Meta restringe el acceso oficial a residentes en <strong>Estados Unidos</strong>. Sin embargo, como mentor
+      digital, le guiaré a través de un protocolo estricto para superar estas barreras geográficas y evitar que su cuenta
+      quede atrapada en listas de espera permanentes.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3><span class="ico">1</span> Protocolo de acceso paso a paso</h3>
+    <ol class="steps">
+      <li><strong>Entrada al sitio:</strong> Acceda a <span class="mono">muse.ai</span>.</li>
+      <li><strong>Registro independiente:</strong> Para evitar conflictos iniciales de región, <em>no vincule sus cuentas de Facebook o Instagram de inmediato</em>. Haga clic en <strong>"Usar otra cuenta"</strong>.</li>
+      <li><strong>Verificación:</strong> Introduzca su correo electrónico, valide el código recibido y registre su fecha de nacimiento.</li>
+      <li><strong>El puente geográfico:</strong> Si encuentra un mensaje de restricción, active una <strong>VPN</strong> (como NordVPN) con ubicación en Estados Unidos y recargue la página. Verá aparecer el botón de <strong>"Empezar"</strong>.</li>
+      <li><strong>Acceso móvil:</strong> Para descargar la app en iOS o Android, deberá cambiar la región de su App Store o Google Play Store a Estados Unidos.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3><span class="ico">⚠</span> Resolución de problemas: El "arma secreta" contra el bucle</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Error común</th><th>Solución de experto</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Bucle de "Lista de Espera"</td>
+            <td>Desconéctese del Wi-Fi y use los datos móviles de su teléfono. A menudo, las IPs residenciales están marcadas.</td>
+          </tr>
+          <tr>
+            <td>Bloqueo de IP constante</td>
+            <td>Cambie el servidor de su VPN y reintente el proceso con un correo electrónico alternativo.</td>
+          </tr>
+          <tr>
+            <td>La página se queda en blanco</td>
+            <td>Limpie la caché del navegador o use el modo incógnito tras activar la conexión a EE. UU.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="ico">★</span> Resumen de acceso</h3>
+    <p>
+      La clave del éxito reside en combinar una <strong class="hl-cyan">VPN robusta</strong>, un
+      <strong class="hl-green">correo independiente</strong> y, sobre todo, el <strong class="hl-amber">cambio de red</strong>
+      (de Wi-Fi a datos) si el sistema se resiste. Una vez superado este umbral, es hora de dar vida a su asistente.
+    </p>
+    <div class="callout warn">
+      <span class="ctag">Advertencia</span>
+      <div>Sin una VPN activa y con una IP marcada, el acceso puede quedar bloqueado permanentemente. Verifique siempre su conexión antes de reintentar.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 3. CONFIG ================= -->
+<section id="config" class="section">
+  <div class="sec-header">
+    <span class="kicker">Capítulo 03</span>
+    <h2>Configuración y Personalización del Agente "Alvi"</h2>
+    <p>Identidad, conexión 24/7 por WhatsApp y ecosistema de conectores.</p>
+  </div>
+
+  <div class="card">
+    <h3><span class="ico">◈</span> Identidad y primeras palabras</h3>
+    <p>
+      La verdadera magia comienza cuando deja de hablar con una máquina genérica y empieza a interactuar con su agente
+      personalizado. Asignarle una identidad <strong>no es solo un detalle visual</strong>; establece el tono de su flujo de
+      trabajo diario.
+    </p>
+    <p>
+      Usted puede bautizar a su agente y elegir su apariencia. En nuestras pruebas, lo llamaremos
+      <strong class="hl-purple">"Alvi"</strong> y le asignaremos el avatar de una <strong>"rana robótica"</strong>.
+    </p>
+    <div class="callout info">
+      <span class="ctag">Info</span>
+      <div>Alvi no es una imagen estática; es un <strong>ser digital animado</strong> que aparecerá en su interfaz web y en su móvil, reflejando que está "pensando" o "trabajando" mediante animaciones fluidas.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="ico">◉</span> Su agente en WhatsApp: Conexión 24/7</h3>
+    <p>Llevar a Alvi en su bolsillo es extremadamente sencillo y es donde más brilla la infraestructura de Meta:</p>
+    <ol class="steps">
+      <li>En la configuración de Muse, vaya a <strong>Canales de mensajes</strong>.</li>
+      <li>Seleccione <strong>WhatsApp</strong> y escanee el código QR con su teléfono.</li>
+      <li><strong>La ventaja técnica:</strong> Gracias a la Linux VM en la nube, Alvi puede recibir sus notas de voz, transcribirlas (instalando automáticamente las librerías necesarias) y responderle aunque su ordenador esté apagado. Es un cerebro independiente que vive en los servidores de Meta.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3><span class="ico">⬡</span> Ecosistema de Conectores</h3>
+    <p>Puede vincular a Alvi con las herramientas que ya usa:</p>
+    <div class="grid-3">
+      <div class="card" style="margin:0;background:rgba(168,85,247,.05)">
+        <h4 style="color:var(--purple)">Meta</h4>
+        <p>Instagram, Facebook, Threads y Messenger.</p>
+      </div>
+      <div class="card" style="margin:0;background:rgba(0,212,255,.05)">
+        <h4>Productividad</h4>
+        <p>Google Calendar y el ecosistema completo de Google.</p>
+      </div>
+      <div class="card" style="margin:0;background:rgba(34,197,94,.05)">
+        <h4 style="color:var(--green)">Negocios y Ocio</h4>
+        <p>Spotify, Calendly y Printify.</p>
+      </div>
+    </div>
+    <div class="callout example">
+      <span class="ctag">Ejemplo</span>
+      <div>Alvi actuará como un puente entre estas apps, permitiéndole, por ejemplo, <strong>pedir por WhatsApp que agende una cita en su Calendly sin abrir la aplicación</strong>.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 4. MULTIMEDIA ================= -->
+<section id="multimedia" class="section">
+  <div class="sec-header">
+    <span class="kicker">Capítulo 04</span>
+    <h2>Creación de Contenido Multimedia de Alto Impacto</h2>
+    <p>Imágenes, vídeo, avatares y podcasts generados por diálogo creativo.</p>
+  </div>
+
+  <div class="card">
+    <h3><span class="ico">◈</span> Un proceso de diálogo creativo</h3>
+    <p>
+      Muse AI transforma la creación de contenido en un proceso de diálogo creativo donde los resultados
+      <strong class="hl-green">carecen de marcas de agua</strong>, dándoles un acabado profesional inmediato.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3><span class="ico">◉</span> Imágenes e Iteración Inteligente</h3>
+    <p>Usted puede subir fotos propias para que Alvi las use como referencia. La clave aquí es la <strong>especificidad técnica</strong>:</p>
+    <div class="grid-2">
+      <div class="callout example" style="margin:0">
+        <span class="ctag">Correcto</span>
+        <div>"Integra a la persona de esta foto en el paisaje de calma generado antes, sentado en una barca con una pose natural".</div>
+      </div>
+      <div class="callout error" style="margin:0">
+        <span class="ctag">Incorrecto</span>
+        <div>"Hazme un dibujo parecido a este".</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="ico">▶</span> Producción de Vídeo y Avatares</h3>
+    <p>
+      Muse AI rompe la barrera de los clips cortos de 10 segundos. Cuando usted solicita un vídeo de larga duración
+      (por ejemplo, <strong>40 segundos</strong>), el agente realiza un trabajo de <strong class="hl-cyan">"artesanía digital"</strong>:
+      genera cuatro clips de 10 segundos de forma secuencial y los une automáticamente para crear una narrativa coherente.
+    </p>
+    <p>
+      Además, la <strong>clonación de voz en castellano</strong> es tan natural que permite crear avatares realistas en tiempo récord.
+    </p>
+    <div class="path-flow">
+      <span class="pn">4 × 10 s</span>
+      <span class="ar">→</span>
+      <span class="pn" style="border-color:rgba(34,197,94,.5);color:#22c55e;background:rgba(34,197,94,.1)">Unión automática</span>
+      <span class="ar">→</span>
+      <span class="pn" style="border-color:rgba(168,85,247,.5);color:#a855f7;background:rgba(168,85,247,.1)">Vídeo de 40 s</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="ico">♪</span> El Podcast Automático: Lucía y Marcos</h3>
+    <p>
+      Al usar el comando <span class="mono">generate podcast about...</span>, Alvi no solo escribe un guion. Crea un programa
+      de audio con dos presentadores virtuales, <strong class="hl-purple">Lucía</strong> y <strong class="hl-purple">Marcos</strong>,
+      quienes mantienen una conversación fluida y natural en español.
+    </p>
+    <div class="callout info">
+      <span class="ctag">Info</span>
+      <div>Lo más impresionante es que puede configurar a Alvi para que <strong>publique estos episodios automáticamente</strong> en plataformas como Apple Podcasts u Overcast.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 5. DEV ================= -->
+<section id="dev" class="section">
+  <div class="sec-header">
+    <span class="kicker">Capítulo 05</span>
+    <h2>Desarrollo de Aplicaciones y Gaming con Artefactos</h2>
+    <p>La joya de la corona: ventanas de ejecución aislada donde el software cobra vida en tiempo real.</p>
+  </div>
+
+  <div class="card">
+    <h3><span class="ico">◆</span> El concepto de "Artefacto"</h3>
+    <p>
+      Para los entusiastas de la tecnología, el concepto de <strong class="hl-cyan">"Artefacto"</strong> es la joya de la corona.
+      Un Artefacto es una <strong>ventana de ejecución aislada dentro del chat</strong> donde usted puede ver, probar y usar el
+      software que el agente está creando en tiempo real.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3><span class="ico">⟳</span> Creación de Software y Auto-iteración</h3>
+    <p>
+      Si pide una aplicación (como un gestor de tareas en HTML), Alvi abrirá un Artefacto. Si el código inicial tiene un error,
+      no se preocupe: el agente <strong>detectará el fallo por sí mismo</strong> gracias a su máquina virtual y realizará una
+      <strong class="hl-green">auto-iteración</strong> hasta que la app funcione perfectamente, sin que usted tenga que saber
+      una sola palabra de programación.
+    </p>
+    <div class="path-flow">
+      <span class="pn">Petición</span>
+      <span class="ar">→</span>
+      <span class="pn">Artefacto</span>
+      <span class="ar">→</span>
+      <span class="pn" style="border-color:rgba(245,158,11,.5);color:#f59e0b;background:rgba(245,158,11,.1)">Detección de error</span>
+      <span class="ar">→</span>
+      <span class="pn" style="border-color:rgba(34,197,94,.5);color:#22c55e;background:rgba(34,197,94,.1)">Auto-iteración</span>
+      <span class="ar">→</span>
+      <span class="pn" style="border-color:rgba(168,85,247,.5);color:#a855f7;background:rgba(168,85,247,.1)">App funcional</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="ico">▶</span> Proyecto GTA 6: Bahía Neón</h3>
+    <p>
+      Para poner a prueba el músculo de Muse AI, podemos pedirle un videojuego inspirado en el futuro <strong>GTA 6</strong>.
+      Al proporcionarle una imagen de referencia, Alvi construye un <strong>entorno 3D interactivo</strong>.
+    </p>
+    <h4>Controles del juego</h4>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Tecla / Control</th><th>Función</th></tr></thead>
+        <tbody>
+          <tr><td><span class="mono">↑ ↓ ← →</span> (flechas)</td><td>Conducir y explorar el entorno</td></tr>
+          <tr><td><span class="mono">E</span></td><td>Entrar / interactuar</td></tr>
+          <tr><td><span class="mono">M</span></td><td>Abrir el mapa</td></tr>
+          <tr><td><span class="mono">T</span></td><td>Abrir el teléfono</td></tr>
+          <tr><td>Turbo, disparos, pausa</td><td>Funciones adicionales integradas</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="ico">⚡</span> Eficiencia Extrema: El valor del Token</h3>
+    <p>
+      Mientras que en otros modelos crear un juego así agotaría sus créditos diarios, en Muse AI esta tarea consume apenas
+      entre un <strong class="hl-green">7% y un 10%</strong> de su presupuesto semanal de <strong>100 millones de tokens</strong>.
+      Meta ha logrado una eficiencia que permite <strong>experimentar sin miedo al bloqueo por consumo</strong>.
+    </p>
+    <div class="metrics" style="margin-top:18px">
+      <div class="metric"><span class="val">100M</span><span class="lbl">Presupuesto semanal</span></div>
+      <div class="metric"><span class="val">7–10%</span><span class="lbl">Consumo por videojuego</span></div>
+      <div class="metric"><span class="val">90%+</span><span class="lbl">Margen restante</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 6. GOALS ================= -->
+<section id="goals" class="section">
+  <div class="sec-header">
+    <span class="kicker">Capítulo 06</span>
+    <h2>Gestión de Objetivos (Goals) y Automatización de Compras</h2>
+    <p>El "Life Coach" digital con seguimiento proactivo de metas y seguridad avanzada.</p>
+  </div>
+
+  <div class="card">
+    <h3><span class="ico">◎</span> Metas Personales y Salud</h3>
+    <p>
+      Muse AI evoluciona para ser su <strong class="hl-purple">"Life Coach" digital</strong> a través de la sección
+      <strong>Goals</strong>, donde realiza un seguimiento proactivo de sus metas.
+    </p>
+    <p>
+      Usted puede establecer un objetivo, como <em>"bajar 5 kg en 2 meses"</em>. Alvi no solo guardará el dato; le enviará
+      <strong>mensajes de motivación por WhatsApp</strong>, sugerirá planes de acción y le recordará sus progresos basándose
+      en la fecha límite establecida.
+    </p>
+    <div class="callout example">
+      <span class="ctag">Ejemplo</span>
+      <div>Objetivo: <strong>"bajar 5 kg en 2 meses"</strong> → Alvi envía recordatorios por WhatsApp, propone planes de acción y registra el progreso hasta la fecha límite.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="ico">⛬</span> Compras y Feeds Inteligentes</h3>
+    <div class="grid-2">
+      <div class="card" style="margin:0;background:rgba(34,197,94,.05)">
+        <h4 style="color:var(--green)">Automatización de Compras</h4>
+        <p>Puede enviarle a Alvi la foto de un producto o un documento de pago. El agente buscará el mejor precio, hará la comparativa y, tras su <strong>aprobación final</strong>, procesará la compra de forma autónoma.</p>
+      </div>
+      <div class="card" style="margin:0;background:rgba(0,212,255,.05)">
+        <h4>Feed de Noticias</h4>
+        <p>Configure intereses específicos (ej. <em>"novedades de Apple"</em> o <em>"IA"</em>). Alvi rastreará la web y le presentará un <strong>resumen visual cada mañana</strong> con lo más relevante.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="ico">🔒</span> Seguridad y Privacidad</h3>
+    <p>
+      Para estas funciones sensibles, Muse AI permite habilitar <strong>contraseñas específicas para el agente</strong> y
+      gestionar detalladamente todos los <strong>permisos de acceso</strong> a sus métodos de pago y datos personales.
+    </p>
+    <div class="callout warn">
+      <span class="ctag">Advertencia</span>
+      <div>Habilite contraseñas específicas del agente antes de permitir compras autónomas o acceso a métodos de pago.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 7. CIERRE ================= -->
+<section id="cierre" class="section">
+  <div class="sec-header">
+    <span class="kicker">Capítulo 07</span>
+    <h2>Conclusión, Ejercicios y Glosario</h2>
+    <p>Resumen general, errores que nunca debes cometer, práctica guiada y vocabulario esencial.</p>
+  </div>
+
+  <div class="card">
+    <h3><span class="ico">★</span> Resumen General</h3>
+    <p>
+      Muse AI no es una herramienta más; es el primer paso hacia una IA que realmente trabaja por nosotros. Con sus
+      <strong class="hl-green">100 millones de tokens</strong>, su capacidad para ejecutar código en una
+      <strong class="hl-purple">Linux VM</strong> y su integración total con canales como <strong>WhatsApp</strong>, Meta ha
+      redefinido lo que esperamos de un asistente digital.
+    </p>
+  </div>
+
+  <div class="card">
+    <h3><span class="ico">✕</span> Errores que NUNCA debes cometer</h3>
+    <div class="callout error">
+      <span class="ctag">Error 1</span>
+      <div><strong>Registro sin VPN:</strong> Si intenta entrar desde fuera de EE. UU. sin protección, su IP podría ser marcada y bloqueada permanentemente.</div>
+    </div>
+    <div class="callout error">
+      <span class="ctag">Error 2</span>
+      <div><strong>Ignorar el bloqueo de Wi-Fi:</strong> Si se queda atrapado en una lista de espera, no insista con la misma red; el cambio a datos móviles es la solución técnica más efectiva.</div>
+    </div>
+    <div class="callout error">
+      <span class="ctag">Error 3</span>
+      <div><strong>Usar correos corporativos restrictivos:</strong> Muchos sistemas de empresa bloquean los códigos de validación de Meta. Use siempre correos comerciales estándar (Gmail, Outlook).</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="ico">▣</span> Ejercicios Prácticos</h3>
+
+    <div style="border:1px solid var(--border);border-radius:10px;padding:18px;margin-bottom:16px;background:rgba(0,212,255,.03)">
+      <h4 style="margin-top:0">Ejercicio 1 · La Mini-App de Relajación</h4>
+      <p>Pida a Alvi: <em>"Crea un artefacto con una app de relajación que cambie el color de fondo y reproduzca un sonido suave al hacer clic".</em></p>
+      <button class="reveal-btn" data-reveal="sol1">Mostrar solución</button>
+      <div class="solution" id="sol1">
+        <strong>Solución:</strong> Alvi generará el código y abrirá una ventana donde podrá pulsar botones y ver los cambios visuales de inmediato.
+      </div>
+    </div>
+
+    <div style="border:1px solid var(--border);border-radius:10px;padding:18px;background:rgba(168,85,247,.03)">
+      <h4 style="margin-top:0">Ejercicio 2 · Vídeo Narrativo</h4>
+      <p>Solicite un vídeo de <strong>20 segundos</strong> sobre un astronauta descubriendo un templo antiguo.</p>
+      <button class="reveal-btn" data-reveal="sol2">Mostrar solución</button>
+      <div class="solution" id="sol2">
+        <strong>Solución:</strong> El agente creará dos clips de 10 segundos, los unirá y le entregará el archivo final listo para descargar.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="ico">◈</span> Glosario</h3>
+
+    <details>
+      <summary>Agente</summary>
+      <div class="dbody">IA con capacidad de ejecutar acciones (comprar, programar) en lugar de solo generar texto.</div>
+    </details>
+
+    <details>
+      <summary>Artefacto</summary>
+      <div class="dbody">Ventana segura e independiente donde se ejecutan apps o juegos dentro del chat.</div>
+    </details>
+
+    <details>
+      <summary>Linux VM</summary>
+      <div class="dbody">Computadora virtual en la nube que procesa las tareas del agente sin usar su PC.</div>
+    </details>
+
+    <details>
+      <summary>Token</summary>
+      <div class="dbody">Unidad de medida de la información procesada por la IA.</div>
+    </details>
+
+    <details>
+      <summary>VPN</summary>
+      <div class="dbody">Herramienta para simular que su conexión proviene de otro país (ej. EE. UU.).</div>
+    </details>
+  </div>
+</section>
+
+<!-- ================= FUENTES ================= -->
+<section id="fuentes" class="section">
+  <div class="sec-header">
+    <span class="kicker">Referencias</span>
+    <h2>Fuentes</h2>
+    <p>Material audiovisual y documental utilizado en este tutorial.</p>
+  </div>
+
+  <div class="source-card">
+    <div class="sicon">▶</div>
+    <div class="sbody">
+      <div class="stitle">Por fin... ¡Muse AI lo consiguió! Su Agente IA hace de TODO GRATIS 🔥</div>
+      <div class="sdesc">Vídeo de referencia sobre el lanzamiento y capacidades de Muse AI.</div>
+      <a href="https://youtube.com/watch?v=-T1qT-iGpIM&amp;is=U7VbLbW1T74ePxGP" target="_blank" rel="noopener">https://youtube.com/watch?v=-T1qT-iGpIM&amp;is=U7VbLbW1T74ePxGP</a>
+    </div>
+  </div>
+
+  <div class="source-card">
+    <div class="sicon" style="background:rgba(0,212,255,.12);border-color:rgba(0,212,255,.4)">◈</div>
+    <div class="sbody">
+      <div class="stitle">Guía de acceso y uso de Muse AI</div>
+      <div class="sdesc">Documento de referencia para el protocolo de acceso global.</div>
+      <a href="https://255f3d37.sibforms.com/serve/MUIFAIHqs7x7AQRPOqIZZR5yzU7gIPrEhx4LwuhPwACgny4LZOGxXMa3uuFt0CQxDtgvqpis3V5QM1pDOEexY0Guh4gspcQkaTm048NCA9LQzntwxHKd78-Z380m4urKtG-IzCUWeajfPPMMEDCN6NIoLZo_QzS7AkwcDhXFikmRy0ltIE5znTuT4lenWlVTrhwAo-uf1MhqDJy6" target="_blank" rel="noopener">https://255f3d37.sibforms.com/serve/MUIFAIHqs7x7AQRPOqIZZR5yzU7gIPrEhx4LwuhPwACgny4LZOGxXMa3uuFt0CQxDtgvqpis3V5QM1pDOEexY0Guh4gspcQkaTm048NCA9LQzntwxHKd78-Z380m4urKtG-IzCUWeajfPPMMEDCN6NIoLZo_QzS7AkwcDhXFikmRy0ltIE5znTuT4lenWlVTrhwAo-uf1MhqDJy6</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CRÉDITOS ================= -->
+<section id="creditos" class="section">
+  <div class="sec-header">
+    <span class="kicker">Información</span>
+    <h2>Créditos</h2>
+    <p>Autoría, fecha de producción y nota educativa.</p>
+  </div>
+
+  <div class="hero-svg-wrap" id="creditSvgSlot">
+    <!-- El mismo SVG animado de HOME se clona aquí mediante JavaScript -->
+  </div>
+
+  <div class="credits-box">
+    <h3>Muse AI: El agente personal definitivo</h3>
+    <div class="cmeta">Tutorial educativo interactivo</div>
+
+    <div class="cname">Rubén Sbarsky</div>
+    <div class="cmeta">Autor y editor</div>
+
+    <div class="date-strip" style="margin-top:18px">
+      <span class="chip accent">📅 14/09/2026</span>
+      <span class="chip">🕐 05:42:16</span>
+    </div>
+
+    <div class="cnote">
+      📚 Este tutorial ha sido elaborado exclusivamente con fines <strong>educativos y de divulgación</strong>.
+    </div>
+
+    <div class="latin">Fiat iustitia, ruat caelum.</div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div>📚 Tutorial solo con fines Educativos y Divulgación</div>
+  <div>👨‍💻 Créditos: Rubén Sbarsky</div>
+  <div>📅 FECHA: 14/09/2026</div>
+  <div>Hora: 05:42:16</div>
+  <span class="f-latin">Fiat iustitia, ruat caelum.</span>
+</footer>
+
+<button id="toTop" aria-label="Volver arriba">▲</button>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ============ SPA NAVIGATION ============ */
+  var navButtons = Array.prototype.slice.call(document.querySelectorAll('.nav-btn'));
+  var sections = Array.prototype.slice.call(document.querySelectorAll('.section'));
+
+  function showSection(id){
+    sections.forEach(function(s){
+      s.classList.toggle('active', s.id === id);
+    });
+    navButtons.forEach(function(b){
+      b.classList.toggle('active', b.getAttribute('data-target') === id);
+    });
+    window.scrollTo({top:0, behavior:'auto'});
+    updateProgress();
+    if(id === 'creditos'){
+      restartCreditSvg();
+    }
+  }
+
+  navButtons.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      showSection(btn.getAttribute('data-target'));
+    });
+  });
+
+  /* ============ CLONAR SVG EN CRÉDITOS ============ */
+  var heroSvg = document.getElementById('heroSvg');
+  var creditSlot = document.getElementById('creditSvgSlot');
+  var creditsSvg = null;
+
+  function cloneWithNewIds(src){
+    var clone = src.cloneNode(true);
+    var idMap = {};
+    var i;
+
+    var withIds = clone.querySelectorAll('[id]');
+    for(i = 0; i < withIds.length; i++){
+      var oldId = withIds[i].id;
+      var newId = 'c_' + oldId + '_' + Math.floor(Math.random()*100000);
+      idMap[oldId] = newId;
+      withIds[i].id = newId;
+    }
+
+    var attrs = ['href','xlink:href','fill','stroke','filter','clip-path','mask','marker-start','marker-mid','marker-end'];
+    var all = clone.querySelectorAll('*');
+    for(i = 0; i < all.length; i++){
+      var el = all[i];
+      for(var a = 0; a < attrs.length; a++){
+        var v = el.getAttribute(attrs[a]);
+        if(!v) continue;
+        if(v.indexOf('url(#') === 0){
+          var refId = v.slice(5, -1);
+          if(idMap[refId]) el.setAttribute(attrs[a], 'url(#' + idMap[refId] + ')');
+        } else if(v.charAt(0) === '#'){
+          var rid = v.slice(1);
+          if(idMap[rid]) el.setAttribute(attrs[a], '#' + idMap[rid]);
+        }
+      }
+    }
+    clone.removeAttribute('id');
+    return clone;
+  }
+
+  function buildCreditsSvg(){
+    if(creditsSvg || !heroSvg || !creditSlot) return;
+    creditsSvg = cloneWithNewIds(heroSvg);
+    creditSlot.appendChild(creditsSvg);
+  }
+
+  function restartCreditSvg(){
+    buildCreditsSvg();
+    if(creditsSvg && typeof creditsSvg.setCurrentTime === 'function'){
+      try{
+        creditsSvg.setCurrentTime(0);
+        creditsSvg.unpauseAnimations();
+      }catch(e){/* silencioso */}
+    }
+  }
+
+  /* ============ BARRA DE PROGRESO ============ */
+  var progressBar = document.getElementById('progressBar');
+
+  function updateProgress(){
+    var docH = document.documentElement.scrollHeight - window.innerHeight;
+    var pct = docH > 0 ? (window.scrollY / docH) * 100 : 0;
+    if(pct < 0) pct = 0;
+    if(pct > 100) pct = 100;
+    progressBar.style.width = pct + '%';
+  }
+
+  window.addEventListener('scroll', updateProgress, {passive:true});
+  window.addEventListener('resize', updateProgress);
+
+  /* ============ BOTÓN VOLVER ARRIBA ============ */
+  var toTop = document.getElementById('toTop');
+  window.addEventListener('scroll', function(){
+    if(window.scrollY > 320){
+      toTop.classList.add('show');
+    } else {
+      toTop.classList.remove('show');
+    }
+  }, {passive:true});
+
+  toTop.addEventListener('click', function(){
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+
+  /* ============ REVEAL SOLUTIONS ============ */
+  var revealBtns = document.querySelectorAll('.reveal-btn');
+  Array.prototype.forEach.call(revealBtns, function(btn){
+    btn.addEventListener('click', function(){
+      var targetId = btn.getAttribute('data-reveal');
+      var el = document.getElementById(targetId);
+      if(!el) return;
+      var isShown = el.classList.toggle('show');
+      btn.textContent = isShown ? 'Ocultar solución' : 'Mostrar solución';
+    });
+  });
+
+  /* ============ PREFERS-REDUCED-MOTION ============ */
+  try{
+    var mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if(mq && mq.matches){
+      var svgs = document.querySelectorAll('svg');
+      Array.prototype.forEach.call(svgs, function(s){
+        if(typeof s.pauseAnimations === 'function'){
+          s.pauseAnimations();
+        }
+      });
+    }
+  }catch(e){/* silencioso */}
+
+  /* ============ INIT ============ */
+  buildCreditsSvg();
+  updateProgress();
+
+  /* Navegación por hash opcional */
+  if(window.location.hash){
+    var targetId = window.location.hash.slice(1);
+    if(document.getElementById(targetId)){
+      showSection(targetId);
+    }
+  }
+
+})();
+</script>
+
+</body>
+</html>
